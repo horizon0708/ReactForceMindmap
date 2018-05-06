@@ -1,0 +1,25 @@
+// {
+//     "defaultSeverity": "error",
+//     "extends": [
+//         "tslint:recommended"
+//     ],
+//     "jsRules": {},
+//     "rules": {
+//         "interface-name": [ "never-prefix" ],
+//         "curly": false,
+//         "arrow-parens": false,
+//         "trailing-comma": false,
+//         "member-ordering": false,
+//         "member-access": [
+//             false
+//         ],
+//         "ordered-imports": [
+//             false
+//         ],
+//         "no-console": [
+//             false
+//         ],
+//         "no-var-requires": false
+//     },
+//     "rulesDirectory": []
+// }
