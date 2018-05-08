@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import { EventEmitter} from 'events'
 
 export interface ForceNode {
   id: string;
@@ -30,7 +30,7 @@ export function attachIdAndSkill(langArr: any[]): ForceNode[] {
 export function recursiveLeveling(
   originId: string,
   langRelations: Relation[],
-  nodes: InitialNode[],
+  nodes: ForceNode[],
   currentLevel: number = 0
 ) {
   const ind = langRelations.findIndex(x => x.parent === originId);
@@ -155,12 +155,22 @@ export function isParent(nodeId: string, relations: Relation[]): boolean {
  *
  *  * @return { string | null } depending on parent's existence
  */
-export function getParent(currentNodeId: string, links: ForceLink[]): string {
+export function getParent(currentNodeId: string, links: ForceLink[]): string | null {
   const linkIndex = links.findIndex(link => link.source === currentNodeId);
   if (linkIndex > -1) {
     return links[linkIndex].target;
   }
   return null;
+}
+
+export function getBreadCrumb(currentNodeID: string, links: ForceLink[], resArr: string[] = []): string[] {
+
+    let parent = getParent(currentNodeID,links);
+    if(parent){
+      resArr.push(parent);
+      getBreadCrumb(parent, links, resArr);
+    }
+    return resArr
 }
 
 export function getCurrentLevel(currentNodeId: string, nodes: ForceNode[]) {
@@ -186,7 +196,6 @@ export class AnimationTimer extends EventEmitter {
   }
 
   startTimer() {
-    console.log("timer start");
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -295,7 +304,7 @@ export function getTextColor(skill: number, colorArray: string[]) {
   return colorArray[skill];
 }
 
-export function restrainToRange (
+export function restrainToRange(
   x: number,
   start: number,
   end: number,
@@ -305,40 +314,99 @@ export function restrainToRange (
   if (x > end - padding) return end - padding;
   if (x < start + padding) return start + padding;
   return x;
-};
+}
 
-export function tagsToNodesAndLinks(tags: Relation[]) : {nodes:ForceNode[],links: ForceLink[]}{
+export function tagsToNodesAndLinks(
+  tags: Relation[]
+): { nodes: ForceNode[]; links: ForceLink[] } {
   const nodes = tags.map(node => {
     return {
       id: node.parent,
       skill: 5
-    }
+    };
   });
-  const links = tags.map(node => {
-    return node.children.map(child=>{
-      return {
-        source: child,
-        target: parent
-      }
+  const links = tags
+    .map(node => {
+      return node.children.map(child => {
+        return {
+          source: child,
+          target: node.parent
+        };
+      });
     })
-  }).reduce((a,b)=> a.concat(b));
+    .reduce((a, b) => a.concat(b));
   return {
     nodes,
     links
-  }
+  };
 }
 
 // doesnt check for existing target because this is for tags, and we will be generating target nodes depending onthis function
-export function filterTagLinksByNodes(links: ForceLink[], nodes: ForceNode[]){
+export function filterTagLinksByNodes(links: ForceLink[], nodes: ForceNode[]) {
   const nodeIds = nodes.map(node => node.id);
-  return links.filter(link => nodeIds.includes(link.source));
+  return links.filter(link => {
+    const searchId = link.source.id ? link.source.id : link.source;
+    return nodeIds.includes(searchId);
+  });
 }
 
 //https://stackoverflow.com/a/14438954 for what `Set` is doing here
-export function filterTagNodes(filteredLinks: ForceLink[], tagNodes: ForceNode[]){
-  const tags = [... new Set(filteredLinks.map(link => link.target))]
+export function filterTagNodes(
+  filteredLinks: ForceLink[],
+  tagNodes: ForceNode[]
+) {
+  const tags = Array.from(
+    new Set(
+      filteredLinks.map(link => {
+        return link.target.id ? link.target.id : link.target;
+      })
+    )
+  );
   // probably could just return the Set...
   return tagNodes.filter(node => tags.includes(node.id));
 }
+/**
+ * mutate merge using push
+ * push contents of array 2 to array 1
+ */
+export function arrayMerge(arr1: any[], arr2: any[]): any[] {
+  arr2.forEach(item => arr1.push(item));
+  return arr1;
+}
 
+export function isTag(nodeId: string, tagRelations: Relation[]){
+  const search = tagRelations.map(relation=> relation.parent);
+  return search.includes(nodeId);
+}
 
+export function hasChild(
+  nodeId: string,
+  relations: Relation[],
+  currentNode: string
+): boolean {
+  if (currentNode) {
+    return relations.findIndex(relation => relation.parent === nodeId) > -1 && nodeId !== currentNode;
+  }
+  return relations.findIndex(relation => relation.parent === nodeId) > -1;
+}
+
+export function generateTagColorMap(tagRelation: Relation[], tagColorRange: string[]){
+  let counter = 0;
+  let output = {};
+  for (let index = 0; index < tagRelation.length; index++) {
+    if(counter > tagColorRange.length -1){
+      counter = 0;
+    }
+    counter++;
+    output[tagRelation[index].parent] = tagColorRange[counter];
+  }
+  return output;
+}
+
+export function filterTagLinks(links: ForceLink[], tagRelations:Relation[]){
+  const search = tagRelations.map(relation=> relation.parent);
+  return links.filter(link => {
+    const target = link.target.id ? link.target.id : link.target;
+    return !search.includes(target);
+  })
+}
