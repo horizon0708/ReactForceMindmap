@@ -13,7 +13,7 @@ interface Props {
   graph: GraphState
 }
 
-type AllProps = Props & GraphState & ReduxProps
+type AllProps = Props & ApplicationState & ReduxProps
 
 class TagComponent extends React.Component<AllProps, any> {
   constructor(props: any, context: any) {
@@ -25,34 +25,35 @@ class TagComponent extends React.Component<AllProps, any> {
     this.props.dispatch(actionUpdateTagParent({name, newName}))
    }
 
-   onParentAdd = (name:string) => e=> {
+   onParentAdd = (name:string) => (e:any)=> {
     this.props.dispatch(actionAddTagParent({name}));
    }
 
-   onParentDelete = (name:string) => e=> {
+   onParentDelete = (name:string) => (e:any)=> {
     this.props.dispatch(actionDeleteTagParent({name}))
    }
 
-   onParentEditStart =(name:string) => e => {
+   onParentEditStart =(name:string) => (e:any) => {
      this.props.dispatch(actionUpdateCurrentTag({name}))
    }
 
-   onChildAdd = (parentName: string) => e=> {
+   onChildAdd = (parentName: string) => (e:any)=> {
     this.props.dispatch(actionUIChange({UIstate: UIState.TagAdd}));
     this.props.dispatch(actionUpdateCurrentTag({name: parentName}));
    }
 
-   onChildAddEnd = () => e=> {
+   onChildAddEnd = () => (e:any)=> {
     this.props.dispatch(actionUpdateCurrentTag({name: null}));
     this.props.dispatch(actionUIChange({UIstate: UIState.Normal}));
    }
 
-   onChildDelete = (parentName: string, name: string) => e => {
+   onChildDelete = (parentName: string, name: string) => (e:any) => {
     this.props.dispatch(actionDeleteTagChild({parentName, name}));
    }
 
    renderTags = () => {
-      const { tags, currentTag, UIstate } = this.props.graph;
+      const { tags  } = this.props.graph;
+      const { currentTag, UIstate }= this.props.graphUI;
       const { onParentDelete, onParentEdit, onParentEditStart, onChildAdd, onChildAddEnd, onChildDelete} = this;
 
       return tags.map(tag => {
@@ -83,7 +84,7 @@ class TagComponent extends React.Component<AllProps, any> {
 }
 
 const mapStateToProps = (state: ApplicationState) => {
-  return { graph: state.graph}
+  return { graph: state.graph, graphUI: state.graphUI}
 }
 
 export default connect(mapStateToProps)(TagComponent);
