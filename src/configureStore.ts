@@ -9,6 +9,7 @@ import { createStore, applyMiddleware, Store } from 'redux';
 // Import the state interface and our combined reducers.
 import { ApplicationState, reducers } from './state';
 import { GraphState } from './state/graph/reducer';
+import { TagUpdater } from './state/graph/tagUpdater';
 
 
 
@@ -21,6 +22,7 @@ export default function configureStore(
   // We'll create our store with the combined reducers and the initial Redux state that
   // we'll be passing from our entry point.
   return createStore<any,any, any, any>(
-    reducers
+    reducers,
+    applyMiddleware(TagUpdater)
   );
 }

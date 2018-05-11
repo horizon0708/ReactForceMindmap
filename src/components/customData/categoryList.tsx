@@ -1,15 +1,21 @@
 import * as React from "react";
 import CategoryItem from "./categoryItem";
-import { Relation } from "../../pages/customData";
+import { Relation } from "./index";
 import { getOriginId, getCategory } from "../../state/graph/helper";
+import { CategoryProps } from './categoryItem'
+import { UIState } from '../../state/graph/reducer';
 
-interface ListProps {
+export interface ListProps {
   categories: Relation[];
   onEdit: any;
   onDelete: any;
   onAdd: any;
   onEditStart: any;
   currentEdit: string;
+  currentTag: string;
+  onAddToTag: any;
+  tags: string[];
+    UIstate: UIState;
 }
 
 const CategoryList: React.SFC<ListProps> = ({
@@ -18,7 +24,11 @@ const CategoryList: React.SFC<ListProps> = ({
   onEdit,
   onDelete,
   currentEdit,
-  onAdd
+  onAdd,
+  currentTag, 
+    onAddToTag,
+    UIstate,
+    tags,
 }) => {
   const originParentId = getOriginId(categories);
 
@@ -27,35 +37,52 @@ const CategoryList: React.SFC<ListProps> = ({
     categories: Relation[]
   ): React.ReactElement<any> => {
     const category = getCategory(categories, categoryName);
+      const { parent, isOpen, origin} = category
+      const categoryProps: CategoryProps = {
+        parent,
+          onAdd,
+          onEditStart,
+          onEdit,
+          onDelete,
+          currentEdit,
+          isOpen,
+          origin,
+          currentTag,
+          onAddToTag,
+          UIstate,
+          tags,
+      }
+
     if (category) {
       return (
-        <CategoryItem
-          onAdd={onAdd}
-          onEditStart={onEditStart}
-          parent={category.parent}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          currentEdit={currentEdit}
-        >
+        <CategoryItem {...categoryProps}>
           {category.children.map(child => {
             return recursiveCategories(child, categories);
           })}
         </CategoryItem>
       );
     }
+      const defaultProps: CategoryProps = {
+          onAdd,
+          onEditStart,
+          parent: categoryName,
+          onEdit,
+          onDelete,
+          currentEdit,
+          isOpen: true,
+          origin: false,
+          currentTag,
+          onAddToTag,
+          UIstate
+      }
     return (
-      <CategoryItem
-        onAdd={onAdd}
-        onEditStart={onEditStart}
-        parent={categoryName}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        currentEdit={currentEdit}
-      />
+      <CategoryItem {...defaultProps}/>
     );
   };
 
   return <div>{recursiveCategories(originParentId, categories)}</div>;
 };
+
+
 
 export default CategoryList;

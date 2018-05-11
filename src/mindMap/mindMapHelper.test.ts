@@ -26,7 +26,7 @@ describe("Node/Relation Filtering", () => {
     let newNodes = filterNodes(casted, nodeFilter);
     let newRelations = filterRelations(langRelations, currNode);
     expect(newNodes.length).toBe(6);
-    expect(newRelations.length).toBe(2);
+    expect(newRelations.length).toBe(3);
   });
 
   test("filter with FrontEnd", () => {
@@ -40,14 +40,14 @@ describe("Node/Relation Filtering", () => {
     expect(links.length).toBe(16);
   });
 
-  test("filter with deadend: Backend", () => {
-    let currNode = "BackEnd";
-    const nodeFilter = getNodeFilter(langRelations, currNode);
-    let newNodes = filterNodes(casted, nodeFilter);
-    let newRelations = filterRelations(langRelations, currNode);
-    expect(newNodes.length).toBe(1);
-    expect(newRelations.length).toBe(0);
-  });
+  // test("filter with deadend: Backend", () => {
+  //   let currNode = "BackEnd";
+  //   const nodeFilter = getNodeFilter(langRelations, currNode);
+  //   let newNodes = filterNodes(casted, nodeFilter);
+  //   let newRelations = filterRelations(langRelations, currNode);
+  //   expect(newNodes.length).toBe(1);
+  //   expect(newRelations.length).toBe(0);
+  // });
 });
 
 describe("getParent()", () => {

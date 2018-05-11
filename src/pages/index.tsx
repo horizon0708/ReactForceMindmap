@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "gatsby-link";
-// import MindMap from "../mindMap/canvasMindMap";
-import * as MindMap from "force-mindmap";
+import MindMap from "../mindMap/canvasMindMap";
+// import * as MindMap from "force-mindmap";
 import { nameAndSkills, langRelations, langTags } from '../mindMap/sampleData';
 import * as jsonh from "../../node_modules/json-url/dist/browser/json-url";
 import "json-url/dist/browser/json-url-msgpack";
@@ -36,14 +36,15 @@ export default class extends React.Component<any, any> {
       const param = getUrlParamByName("data", this.props.location.search);
       const encoder = jsonh("lzma");
       encoder.decompress(param).then(json => {
+        console.log(json);
         this.setState(
           {
             mindMap: new MindMap(
               "#d3forcegraph",
-              json.nameAndSkills,
-              json.langRelations,
-              "Web Dev",
-              json.langTags
+              json.skills,
+              json.categories,
+              json.origin,
+              json.tags
             )
           },
 

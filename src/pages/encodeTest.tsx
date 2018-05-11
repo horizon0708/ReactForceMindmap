@@ -54,7 +54,7 @@ export default class extends React.Component<any, any> {
 
   render(){
     return <div>
-      <button onClick={this.onJsonClick}>generate json!</button>
+      <button onClick={this.onJsonClick}>generate& encode json!</button>
       <p>{this.state.json}</p>
       <div>{this.state.json.length}</div>
       <hr/>
