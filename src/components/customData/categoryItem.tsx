@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Relation } from "../../mindMap/mindMapHelper";
 import { UIState } from "../../state/graph/reducer";
+import * as FA from "react-fontawesome";
 
 export interface CategoryProps {
   parent: string;
@@ -39,11 +40,13 @@ const CategoryItem: React.SFC<CategoryProps> = ({
       return (
         <form onSubmit={onSubmit(onEdit)}>
           <input type="text" name="node" placeholder={parent} />
-          <button>Edit</button>
+          <button>
+            <FA name="pencil" />
+          </button>
         </form>
       );
     }
-    return <div>{parent}</div>;
+    return <p>{parent}</p>;
   };
 
   const onSubmit = (fn: any) => (event: any) => {
@@ -53,42 +56,44 @@ const CategoryItem: React.SFC<CategoryProps> = ({
   };
 
   const renderTags = () => {
-    console.log(tags);
-    return tags ? tags.map(tag => {
-      return <span>{tag}</span>
-    }): null;
-  }
+    return tags
+      ? tags.map(tag => {
+          return <span className="tag">{tag}</span>;
+        })
+      : null;
+  };
 
   return (
-    <div style={itemStyle}>
-      <div style={parentStyle}>
+    <div >
+      <div className="category-parent">
         {renderEdit()}
         {parent === currentEdit ? null : (
-          <button onClick={onEditStart(parent)}>edit</button>
+          <a onClick={onEditStart(parent)}>
+            <FA className="ml-half category-icon" name="pencil" />
+          </a>
         )}
-        {origin ? null : <button onClick={onDelete(parent)}>delete</button>}
+        {origin ? null : <a className="ml-half category-icon" onClick={onDelete(parent)}><FA name="trash" /></a>}
         {renderTags()}
         {!tags.includes(currentTag) && UIstate === UIState.TagAdd ? (
-        <button onClick={onAddToTag(parent)}>Add to {currentTag}</button>
-      ) : null}
+          <button onClick={onAddToTag(parent)}>
+            <FA name="plus" /> Add to {currentTag}
+          </button>
+        ) : null}
       </div>
-      
       {isOpen ? (
-        <div>
+        <div className="category-children">
           {children}
-          <button onClick={onAdd(parent)}>Add</button>
+          <a className="category-icon"onClick={onAdd(parent)}><FA name="plus" /> Add a node</a>
         </div>
       ) : null}{" "}
     </div>
   );
 };
 
-const parentStyle = {
-  display: "flex"
-};
+
 
 const itemStyle = {
-  marginLeft: "16px"
+  marginLeft: "20px",
 };
 
 export default CategoryItem;

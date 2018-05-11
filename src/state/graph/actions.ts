@@ -23,6 +23,7 @@ export interface GraphAction {
   actionUpdateCurrentTag: typeof actionUpdateCurrentTag;
   actionUIChange: typeof actionUIChange;
 actionUpdateCategoryTags: typeof actionUpdateCategoryTags;
+actionClearAll: typeof actionClearAll;
 }
 
 export const actionUIChange = actionCreator<{ UIstate: UIState }>("UI_CHANGE");
@@ -81,3 +82,4 @@ export const actionUpdateCurrentTag = actionCreator<{ name: string | null }>(
 );
 
 export const actionUpdateCategoryTags = actionCreator<{}>("CATEGORY_TAG_UPDATE");
+export const actionClearAll = actionCreator<{}>("CLEAR_ALL");

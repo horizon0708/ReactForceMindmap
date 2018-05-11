@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Relation } from "../customData/index";
 import TagItem from "./tagItem";
-import { UIState } from '../../state/graph/reducer';
+import { UIState } from "../../state/graph/reducer";
+import * as FA from "react-fontawesome";
 
 export interface TagGroupProps {
   tag: Relation;
@@ -9,7 +10,7 @@ export interface TagGroupProps {
   onParentEditStart: any;
   onParentDelete: any;
   onChildAdd: any;
-  onChildAddEnd:any;
+  onChildAddEnd: any;
   onChildDelete: any;
   currentTag: string;
   UIstate: UIState;
@@ -44,26 +45,36 @@ const TagGroup: React.SFC<TagGroupProps> = ({
     e.preventDefault();
     const item = e.target.tag.value;
     if (item) {
-      console.log(fn(parent,item))
+      console.log(fn(parent, item));
       fn(parent, item);
     }
   };
   return (
-    <div>
-      <div>
+    <div className="tag-container">
+      <div className="tag-parent">
         {renderEdit()}
-        {parent === currentTag && UIstate === UIState.Normal? null : (
-          <button onClick={onParentEditStart(parent)}>Edit</button>
+        
+        
+        {parent === currentTag && UIstate === UIState.Normal ? null : (
+          <a className="category-icon ml-half" onClick={onParentEditStart(parent)}>
+            <FA name="pencil" />
+          </a>
         )}
-        <button onClick={onParentDelete(parent)}>Delete</button>
+        <a className="category-icon ml-half"  onClick={onParentDelete(parent)}><FA name="trash" /></a>
       </div>
-      <div>
-        {parent === currentTag && UIstate === UIState.TagAdd ? 
-           <button onClick={onChildAddEnd()}>Stop Tagging!</button>
-          : <button onClick={onChildAdd(parent)}>Tag nodes</button>}
+      <div className="tag-children">
         {children.map(child => {
-          return <TagItem parent={parent} name={child} onDelete={onChildDelete} />;
+          return (
+            <TagItem parent={parent} name={child} onDelete={onChildDelete} />
+          );
         })}
+      </div>
+      <div className="tag-footer">
+        {parent === currentTag && UIstate === UIState.TagAdd ? (
+          <button onClick={onChildAddEnd()}>Stop Tagging!</button>
+        ) : (
+          <a onClick={onChildAdd(parent)}><FA name="plus"/> Tag nodes</a>
+        )}
       </div>
     </div>
   );

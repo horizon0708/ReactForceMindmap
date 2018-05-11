@@ -9,7 +9,7 @@ interface Props {
 
 
 const TagItem: React.SFC<Props> = ({name, parent, onDelete}) => {
-  return <span>{name} <button onClick={onDelete(parent, name)}>x</button></span>;
+  return <span className="tag mr-half">{name} <a onClick={onDelete(parent, name)}>x</a></span>;
 }
 
 export default TagItem

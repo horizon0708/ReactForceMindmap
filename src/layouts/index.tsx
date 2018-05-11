@@ -2,35 +2,23 @@ import * as React from 'react'
 import Link from 'gatsby-link'
 import Helmet from 'react-helmet'
 
-import './index.css'
-
+import "font-awesome/scss/font-awesome.scss";
+import '../styles/main.scss';
+// import './index.css'
 const Header = () => (
-  <div
-    style={{
-      background: 'rebeccapurple',
-      marginBottom: '1.45rem',
-    }}
-  >
-    <div
-      style={{
-        margin: '0 auto',
-        maxWidth: 960,
-        padding: '1.45rem 1.0875rem',
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: 'white',
-            textDecoration: 'none',
-          }}
-        >
-          Gatsby
-        </Link>
-      </h1>
+ <nav className="navbar">
+    <div className="navbar-brand">
     </div>
-  </div>
+    <div className="navbar-menu">
+      <div className="navbar-start">
+      </div>
+      <div className="navbar-end">
+        <a className="navbar-item">Custom Data</a>
+        <a className="navbar-item">Example Graph</a>
+        <a className="navbar-item">About</a>
+      </div>
+    </div>
+  </nav>
 )
 
 interface DefaultLayoutProps extends React.HTMLProps<HTMLDivElement> {
@@ -52,15 +40,10 @@ class DefaultLayout extends React.PureComponent<DefaultLayoutProps, void> {
           ]}
         />
         <Header />
-        <div
-          style={{
-            margin: '0 auto',
-            maxWidth: 960,
-            padding: '0px 1.0875rem 1.45rem',
-            paddingTop: 0,
-          }}
-        >
+        <div style={{width: `100%`}}>
+          <div className="container">
           {this.props.children()}
+          </div>
         </div>
       </div>
     )

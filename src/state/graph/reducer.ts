@@ -31,7 +31,7 @@ import {
 } from "./actions";
 import { isType } from "typescript-fsa";
 import { createTagParent, deleteTagParent, deleteTagChild, updateCategoryTags } from './helper';
-import { actionUpdateCurrentTag, actionCurrentEdit, actionUIChange, actionUpdateCategoryTags } from './actions';
+import { actionUpdateCurrentTag, actionCurrentEdit, actionUIChange, actionUpdateCategoryTags, actionClearAll } from './actions';
 
 const reducer: Reducer<GraphState> = (
   state = graphState,
@@ -86,39 +86,48 @@ const reducer: Reducer<GraphState> = (
 
   // Tags
   if (isType(action, actionAddTagChild)) {
-    console.log("twice")
     const { parentName, name } = action.payload;
+    const newTags = createTagChild(tags, parentName, name);
     return {
       ...state,
-      tags: createTagChild(tags, parentName, name)
+      tags: newTags,
+      categoryTags: updateCategoryTags(newTags)
     };
   }
   if (isType(action, actionAddTagParent)) {
     const { name } = action.payload;
+    const newTags = createTagParent(tags, name); 
     return {
       ...state,
-      tags: createTagParent(tags, name)
+      tags: newTags,
+      categoryTags: updateCategoryTags(newTags)
     }
   }
   if (isType(action, actionUpdateTagParent)) {
     const { name , newName} = action.payload;
+     const newTags = updateTagParent(tags, name, newName);
     return {
       ...state,
-      tags: updateTagParent(tags, name, newName)
+      tags: newTags,
+      categoryTags: updateCategoryTags(newTags)
     }
   }
   if (isType(action, actionDeleteTagParent)) {
     const { name } = action.payload;
+      const newTags =  deleteTagParent(tags, name);
     return {
       ...state,
-      tags: deleteTagParent(tags, name)
+      tags: newTags,
+      categoryTags: updateCategoryTags(newTags)
     }
   }
  if (isType(action, actionDeleteTagChild)) {
     const { parentName, name } = action.payload;
+     const newTags = deleteTagChild(tags, parentName, name);
     return {
       ...state,
-      tags: deleteTagChild(tags, parentName, name)
+      tags: newTags,
+      categoryTags: updateCategoryTags(newTags)
     }
   }
   
@@ -133,14 +142,18 @@ const reducer: Reducer<GraphState> = (
   if (isType(action, actionDeleteSkill)) {
   }
 
- 
+
+  if(isType(action, actionClearAll)){
+    return Object.assign({},clearedState);
+  }
+
    // category tag updates
-   if(isType(action, actionUpdateCategoryTags)){
-     return {
-       ...state,
-       categoryTags: updateCategoryTags(state.tags)
-     }
-   }
+  //  if(isType(action, actionUpdateCategoryTags)){
+  //    return {
+  //      ...state,
+  //      categoryTags: updateCategoryTags(state.tags)
+  //    }
+  //  }
 
   return state;
 };
@@ -193,5 +206,19 @@ const graphState: GraphState = {
   ],
   skills: [["Origin", 5], ["Father", 5], ["Child", 5]],
 };
+
+const clearedState: GraphState = {
+  categories: [
+    {
+      parent: "Origin",
+      children: [],
+      origin: true,
+      isOpen: true
+    }
+  ],
+  tags: [],
+  categoryTags: [],
+  skills: [["Origin", 5]]
+}
 
 export default reducer;

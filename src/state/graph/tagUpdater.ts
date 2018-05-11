@@ -2,6 +2,10 @@ import { Middleware, MiddlewareAPI, Dispatch, Action } from "redux";
 import { ApplicationState } from "../index";
 import { actionUpdateCategoryTags } from './actions';
 
+
+/**
+ * Disabled to enable Undo functionality 
+*/
 export const TagUpdater: Middleware = (
   store: ApplicationState & MiddlewareAPI
 ) => next => action => {

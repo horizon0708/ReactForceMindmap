@@ -1,0 +1,58 @@
+.category-parent{
+  display: flex;
+}
+
+.category-children{
+  border-left: 1.5px solid $primary;
+  padding-left: 1rem;
+}
+
+.category-icon {
+  color: $primary;
+  opacity: 0.4;
+
+  &:hover{
+    color: $primary;
+    opacity: 1;
+  }
+}
+
+.mw-1 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.mw-half{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.ml-half{
+  margin-left: 0.5rem;
+}
+
+.mr-half{
+  margin-right: 0.5rem;
+}
+
+// tags
+.tag-container{
+  margin-bottom: 1.5rem;
+  border-radius: 0.35rem;
+}
+
+.tag-parent{
+  padding: 0.2rem 1rem;
+  display: flex;
+  font-size: 1.2rem;
+
+}
+
+.tag-children{
+  margin-bottom: 0.85rem;
+  padding: 0 1rem;
+}
+
+.tag-footer{
+  padding: 0.2rem 1rem;
+}

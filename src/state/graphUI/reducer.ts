@@ -18,7 +18,7 @@ const initialState: GraphUIState = {
   helpText: "Start Adding stuff!",
   UIstate: UIState.Normal,
   currentEdit: null,
-  currentTag: null
+  currentTag: null,
 };
 
 const reducer: Reducer<GraphUIState> = (
@@ -49,6 +49,7 @@ const reducer: Reducer<GraphUIState> = (
       UIstate
     };
   }
+  return state;
 };
 
 

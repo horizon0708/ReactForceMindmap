@@ -8,6 +8,7 @@ import TagItem from './tagItem';
 import { TagGroupProps } from './tagGroup';
 import TagGroup from './tagGroup';
 import { actionUpdateTagParent, actionAddTagParent, actionDeleteTagParent, actionAddTagChild, actionDeleteTagChild, actionUpdateCurrentTag, actionUIChange, actionCurrentEdit } from '../../state/graph/actions';
+import * as FA from 'react-fontawesome';
 
 interface Props {
   graph: GraphState
@@ -77,7 +78,7 @@ class TagComponent extends React.Component<AllProps, any> {
      return(
        <div>
          {this.renderTags()}
-         <button onClick={this.onParentAdd("New Tag")}>Add New Tag</button>
+         <a style={{fontSize: '1.2rem'}} onClick={this.onParentAdd("New Tag")}><FA name="plus"></FA>Add A New Tag</a>
        </div>
      )
    }
