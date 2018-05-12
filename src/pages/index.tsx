@@ -115,6 +115,7 @@ const mapStateToProps = (state: ApplicationState) => {
   return { graphUI: state.graphUI };
 };
 // not sure why ts is throwing errors here but in other components...
+// @ts-ignore
 export default connect(mapStateToProps)(IndexPage);
 
 export const pageQuery = graphql`
