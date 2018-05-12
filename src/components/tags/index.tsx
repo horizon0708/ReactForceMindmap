@@ -24,7 +24,8 @@ class TagComponent extends React.Component<AllProps, any> {
 
    onParentEdit= (name:string, newName:string) => {
      console.log("hllo?")
-    this.props.dispatch(actionUpdateTagParent({name, newName}))
+    newName ? this.props.dispatch(actionUpdateTagParent({name, newName})) : null;
+     this.props.dispatch(actionUpdateCurrentTag({name: null}))
    }
 
    onParentAdd = (name:string) => (e:any)=> {

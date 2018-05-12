@@ -13,6 +13,7 @@ import {
 import { UIState } from "../../state/graph/reducer";
 import { actionGenerateMindMap } from "../../state/graphUI/actions";
 import ReactModal from "../modal";
+import LoadModal from '../loadModal';
 
 class Workbar extends React.Component<any, any> {
   encodeAndSend = () => {
@@ -94,9 +95,8 @@ class Workbar extends React.Component<any, any> {
           {this.renderStopAddTag()}
         </div>
         <div>
-          <ReactModal />
-          <a className="button is-primary ml-half is-outlined is-info">Save</a>
-          <a className="button is-primary ml-half is-outlined is-info">Load</a>
+          <ReactModal buttonText="Export" graph={this.props.graph}/>
+          <LoadModal dispatch={this.props.dispatch}></LoadModal>
           <a
             onClick={this.onMindMapGenerate}
             className="button is-primary ml-half"

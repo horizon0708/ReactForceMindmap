@@ -6,17 +6,14 @@ import "font-awesome/scss/font-awesome.scss";
 import '../styles/main.scss';
 // import './index.css'
 const Header = () => (
-  <nav className="container">
-    <div className="brand">
+  <nav style={{display: 'flex', justifyContent:"space-between" }}className="container">
+    <div>
+      <Link style={{fontWeight: 800, fontSize: '1.2rem', color: '#007acc'}} className="navbar-item" to="/">Force Mindmap</Link>
     </div>
-    <div className="navbar-menu is-active">
-      <div className="navbar-start">
-      </div>
-      <div className="navbar-end">
-        <Link to="/create-your-own"><a className="navbar-item">Create your own</a></Link>
-        <Link to="/"><a className="navbar-item">Example Mindmap</a></Link>
-        <Link to="about"><a className="navbar-item">About</a></Link>
-      </div>
+    <div style={{display: 'flex'}}>
+        <Link className="navbar-item" to="/create-your-own">Create your own</Link>
+        <Link className="navbar-item" to="/">Example Graph</Link>
+        <Link className="navbar-item" to="about">About</Link>
     </div>
   </nav>
 )

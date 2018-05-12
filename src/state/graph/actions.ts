@@ -3,7 +3,7 @@ import { ActionCreator, Action } from "redux";
 import { $Call } from "utility-types"; // From https://github.com/piotrwitek/utility-types
 
 import actionCreatorFactory from "typescript-fsa";
-import { UIState } from "./reducer";
+import { UIState, GraphState } from "./reducer";
 
 const actionCreator = actionCreatorFactory();
 
@@ -22,9 +22,14 @@ export interface GraphAction {
   actionUpdateSkill: typeof actionUpdateSkill;
   actionUpdateCurrentTag: typeof actionUpdateCurrentTag;
   actionUIChange: typeof actionUIChange;
-actionUpdateCategoryTags: typeof actionUpdateCategoryTags;
-actionClearAll: typeof actionClearAll;
+  actionUpdateCategoryTags: typeof actionUpdateCategoryTags;
+  actionClearAll: typeof actionClearAll;
+  actionImportData: typeof actionImportData;
 }
+
+export const actionImportData = actionCreator<{ data: GraphState }>(
+  "IMPORT_DATA"
+);
 
 export const actionUIChange = actionCreator<{ UIstate: UIState }>("UI_CHANGE");
 
@@ -81,5 +86,7 @@ export const actionUpdateCurrentTag = actionCreator<{ name: string | null }>(
   "TAG_CURRENT_UPDATE"
 );
 
-export const actionUpdateCategoryTags = actionCreator<{}>("CATEGORY_TAG_UPDATE");
+export const actionUpdateCategoryTags = actionCreator<{}>(
+  "CATEGORY_TAG_UPDATE"
+);
 export const actionClearAll = actionCreator<{}>("CLEAR_ALL");

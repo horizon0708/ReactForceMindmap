@@ -31,8 +31,9 @@ import {
 
 import * as d3 from "d3";
 import { getBreadCrumb } from './mindMapHelper';
+import { EventEmitter } from "events";
 
-export default class CanvasForceMap {
+export default class CanvasForceMap extends EventEmitter {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   private width: number;
@@ -117,6 +118,7 @@ export default class CanvasForceMap {
     origin: string,
     tags: Relation[]
   ) {
+    super();
     this.initialSetup(selector, nameAndSkills, relations, origin, tags);
   }
 
@@ -218,6 +220,7 @@ export default class CanvasForceMap {
     this.currentNode = currentNodeId;
     this.currentLevel = getCurrentLevel(currentNodeId, this.originalNodes);
     this.breadcrumb = getBreadCrumb(this.currentNode, this.originalLinks);
+    this.emit("BREADCRUMB_UPDATE", this.breadcrumb);
     const { nodes, links } = this.filterNodesAndLinks(currentNodeId);
     if (this.originalTagLinks && this.originalTagNodes) {
       this.tagLinks = filterTagLinksByNodes(this.originalTagLinks, nodes);

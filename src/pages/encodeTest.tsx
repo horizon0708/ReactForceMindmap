@@ -1,5 +1,6 @@
 import * as React from "react";
 import { nameAndSkills, langRelations, langTags } from '../mindMap/sampleData';
+//@ts-ignore
 import * as jsonh from '../../node_modules/json-url/dist/browser/json-url';
 import 'json-url/dist/browser/json-url-msgpack'
 import 'json-url/dist/browser/json-url-lzw'
@@ -24,7 +25,7 @@ export default class extends React.Component<any, any> {
     }
   }
 
-  onJsonClick = e => {
+  onJsonClick = (e:any) => {
     this.setState({
       json: JSON.stringify(this.state.data).replace(
         /\u2028|\u2029/g,
@@ -38,15 +39,15 @@ export default class extends React.Component<any, any> {
       })
     })
     const codec = jsonh('lzma');
-    codec.compress(this.state.data).then(res => {
+    codec.compress(this.state.data).then((res:any) => {
       console.log(res)
       this.setState({jsonurl: res})
-      codec.decompress(res).then(json=> {
+      codec.decompress(res).then((json:any)=> {
         console.log(json);
       })
     })
     const lzw = jsonh('lzw');
-    lzw.compress(this.state.data).then(res => {
+    lzw.compress(this.state.data).then((res:any) => {
       console.log(res)
       this.setState({lzw: res})
     })

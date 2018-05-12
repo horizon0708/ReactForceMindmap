@@ -31,7 +31,8 @@ import {
 } from "./actions";
 import { isType } from "typescript-fsa";
 import { createTagParent, deleteTagParent, deleteTagChild, updateCategoryTags } from './helper';
-import { actionUpdateCurrentTag, actionCurrentEdit, actionUIChange, actionUpdateCategoryTags, actionClearAll } from './actions';
+import { actionUpdateCurrentTag, actionCurrentEdit, actionUIChange, actionUpdateCategoryTags, actionClearAll, actionImportData } from './actions';
+import { importState } from './dataLoader';
 
 const reducer: Reducer<GraphState> = (
   state = graphState,
@@ -137,6 +138,10 @@ const reducer: Reducer<GraphState> = (
   if (isType(action, actionDeleteSkill)) {
   }
 
+  if(isType(action, actionImportData)){
+    const { data } = action.payload;
+    return importState(state, data );
+  }
 
   if(isType(action, actionClearAll)){
     return Object.assign({},clearedState);

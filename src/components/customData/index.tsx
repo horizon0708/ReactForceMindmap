@@ -1,8 +1,7 @@
 import * as React from "react";
-import CategoryList from "./categoryList";
 import { connect } from "react-redux";
 import { ApplicationState } from "../../state/index";
-import { GraphState, UIState } from "../../state/graph/reducer";
+import { GraphState, UIState } from '../../state/graph/reducer';
 import { Dispatch } from "redux";
 import {
   actionAddCategory,
@@ -13,7 +12,6 @@ import {
   actionAddTagChild
 } from "../../state/graph/actions";
 import { ReduxProps } from "../../state/types";
-import { ListProps } from "./categoryList";
 import { getCategory, getCategoryTags, getOriginId } from '../../state/graph/helper';
 import { CategoryProps } from "./categoryItem";
 import CategoryItem from './categoryItem';
@@ -35,17 +33,13 @@ class CustomData extends React.Component<AllProps, any> {
     super(props, context);
   }
 
-  componentDidUpdate() {
-    console.log(this.props);
-  }
-
   recursiveCategoryRender = (categoryName: string) : any => {
     const {
       categories,
       categoryTags,
       skills,
      
-    } = this.props.graph; 
+    } = this.props.graph.present; 
     const {
       currentTag,
       currentEdit,
@@ -103,7 +97,7 @@ class CustomData extends React.Component<AllProps, any> {
   };
 
   render() {
-    const originParentId = getOriginId(this.props.graph.categories);
+    const originParentId = getOriginId(this.props.graph.present.categories);
     return (
       <div>
         {this.recursiveCategoryRender(originParentId)}
@@ -139,7 +133,7 @@ class CustomData extends React.Component<AllProps, any> {
 }
 
 const mapStateToProps = (state: ApplicationState) => {
-  return { graph: state.graph.present, graphUI: state.graphUI };
+  return { graph: state.graph, graphUI: state.graphUI };
 };
 
 export default connect(mapStateToProps)(CustomData);

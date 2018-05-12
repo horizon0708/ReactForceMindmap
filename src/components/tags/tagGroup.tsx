@@ -47,9 +47,7 @@ const TagGroup: React.SFC<TagGroupProps> = ({
   const onSubmit = (fn: any) => (e: any) => {
     e.preventDefault();
     const item = e.target.tag.value;
-    if (item) {
       fn(parent, item);
-    }
   };
   return (
     <div style={{borderColor: color, borderWidth: '2px', borderStyle: "solid"}} className="tag-container">

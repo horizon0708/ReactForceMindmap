@@ -1,8 +1,10 @@
 import * as React from "react";
 import Link from "gatsby-link";
 // import MindMap from "../mindMap/canvasMindMap";
+
 import * as MindMap from "force-mindmap";
-import { nameAndSkills, langRelations, langTags } from '../mindMap/sampleData';
+import { nameAndSkills, langRelations, langTags } from "../mindMap/sampleData";
+//@ts-ignore
 import * as jsonh from "../../node_modules/json-url/dist/browser/json-url";
 import "json-url/dist/browser/json-url-msgpack";
 import "json-url/dist/browser/json-url-lzw";
@@ -10,10 +12,9 @@ import "json-url/dist/browser/json-url-lzma";
 import "json-url/dist/browser/json-url-lzstring";
 import "json-url/dist/browser/json-url-safe64";
 import { getUrlParamByName } from "../utilities/urlParamHelper";
-import { connect } from 'react-redux';
-import { ApplicationState } from '../state/index';
-// Please note that you can use https://github.com/dotansimha/graphql-code-generator
-// to generate all types from graphQL schema
+import { connect } from "react-redux";
+import { ApplicationState } from "../state/index";
+import { ReduxProps } from '../state/types';
 interface IndexPageProps {
   data: {
     site: {
@@ -24,41 +25,40 @@ interface IndexPageProps {
   };
 }
 
+type AllProps = IndexPageProps & ApplicationState & ReduxProps;
+
 class IndexPage extends React.Component<any, any> {
   constructor(props: IndexPageProps, context: any) {
     super(props, context);
     this.state = {
-      mindMap: null
+      mindMap: null,
     };
   }
 
   componentDidMount() {
-    // if (this.props.location.search) {
-      // console.log("from url!");
-      // const param = getUrlParamByName("data", this.props.location.search);
-      // const encoder = jsonh("lzma");
-      // encoder.decompress(param).then(json => {
-      //   console.log(json);
-      //   this.setState(
-      //     {
-      //       mindMap: new MindMap(
-      //         "#d3forcegraph",
-      //         json.skills,
-      //         json.categories,
-      //         json.origin,
-      //         json.tags
-      //       )
-      //     },
-
-      //     () => {
-      //       this.state.mindMap.startGraph();
-      //     }
-      //   );
-      // });
-      const { mindMap} = this.props.graphUI;
-      if(mindMap){
-      const {origin, categories, tags, skills} = mindMap;
-        this.setState({
+    const { mindMap } = this.props.graphUI;
+    if (this.props.location.search) {
+      const param = getUrlParamByName("example", this.props.location.search);
+      if (param) {
+        this.setState(
+          {
+            mindMap: new MindMap(
+              "#d3forcegraph",
+              nameAndSkills,
+              langRelations,
+              "Web Dev",
+              langTags
+            )
+          },
+          () => {
+            this.state.mindMap.startGraph();
+          }
+        );
+      }
+    } else if (mindMap) {
+      const { origin, categories, tags, skills } = mindMap;
+      this.setState(
+        {
           mindMap: new MindMap(
             "#d3forcegraph",
             skills,
@@ -66,9 +66,11 @@ class IndexPage extends React.Component<any, any> {
             origin,
             tags
           )
-        },() => {
+        },
+        () => {
           this.state.mindMap.startGraph();
-        })
+        }
+      );
     } else {
       this.setState(
         {
@@ -80,7 +82,6 @@ class IndexPage extends React.Component<any, any> {
             langTags
           )
         },
-
         () => {
           this.state.mindMap.startGraph();
         }
@@ -91,23 +92,20 @@ class IndexPage extends React.Component<any, any> {
   public render() {
     return (
       <div>
-        <h1>Hi people</h1>
-        <p>
-          Welcome to your new{" "}
-          <strong>{this.props.data.site.siteMetadata.title}</strong> site.
-        </p>
+        <div style={{display: "flex", justifyContent:"space-between"}}className="container">
+          <a
+            className="button is-primary"
+            onClick={
+              this.state.mindMap ? this.state.mindMap.gotoParentNode : null
+            }
+          >
+            Go up one level
+          </a>
+          <div>
 
-        <p>Now go build something great.</p>
-        <button
-          onClick={
-            this.state.mindMap ? this.state.mindMap.gotoParentNode : null
-          }
-        >
-          {" "}
-          back{" "}
-        </button>
+          </div>
+        </div>
         <canvas id="d3forcegraph" width="1000" height="600" />
-        <Link to="/page-2/">Go to page 2</Link>
       </div>
     );
   }
@@ -116,9 +114,8 @@ class IndexPage extends React.Component<any, any> {
 const mapStateToProps = (state: ApplicationState) => {
   return { graphUI: state.graphUI };
 };
-
+// not sure why ts is throwing errors here but in other components...
 export default connect(mapStateToProps)(IndexPage);
-
 
 export const pageQuery = graphql`
   query IndexQuery {

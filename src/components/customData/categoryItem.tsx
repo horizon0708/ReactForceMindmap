@@ -41,9 +41,9 @@ const CategoryItem: React.SFC<CategoryProps> = ({
   const renderEdit = () => {
     if (parent === currentEdit) {
       return (
-        <form onSubmit={onSubmit(onEdit)}>
-          <input type="text" name="node" placeholder={parent} />
-          <button>
+        <form onSubmit={onSubmit(onEdit)} style={{display: 'flex'}}>
+          <input style={{display: 'inline'}} className="input" type="text" name="node" placeholder={parent} />
+          <button style={{border: "none", background:"none", fontSize: '1.2rem'}} className="category-icon">
             <FA name="pencil" />
           </button>
         </form>

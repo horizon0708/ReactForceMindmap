@@ -1,7 +1,8 @@
 import * as React from "react";
 import * as Modal from "react-modal";
-import { GraphState } from "../state/graph/reducer";
-import { EncodeJSON } from "../state/graph/dataEncoder";
+import { GraphState } from '../state/graph/reducer';
+import { EncodeJSON, decodeJSON } from '../state/graph/dataEncoder';
+import { actionImportData } from '../state/graph/actions';
 
 const customStyles = {
   content: {
@@ -14,12 +15,11 @@ const customStyles = {
   }
 };
 
-export interface ModalProps {
-  buttonText: string;
-  graph: GraphState;
+export interface LoadModalProps {
+  dispatch: any
 }
 
-export default class SaveModal extends React.Component<any, any> {
+export default class LoadModal extends React.Component<LoadModalProps, any> {
   constructor() {
     super();
 
@@ -33,43 +33,39 @@ export default class SaveModal extends React.Component<any, any> {
     this.closeModal = this.closeModal.bind(this);
   }
 
-  openModal() {
-    this.setState({ modalIsOpen: true });
-    const { graph } = this.props;
-    console.log(graph);
-    if (graph) {
-      this.setState({ json: JSON.stringify(graph) });
-      EncodeJSON(graph)
-        .then(res => this.setState({ encoded: res }))
-        .catch(err =>
-          this.setState({
-            encoded: "Sorry there was an error in compressing JSON"
-          })
-        );
+  onLoad = (name:string) => (e:any) => {
+    const {json, encoded} = this.state;
+    if(name === "json") {
+      if(json) {
+        try{
+        const data = JSON.parse(json);
+        this.props.dispatch(actionImportData({data}))
+        } catch(err){
+          console.error("not a valid json!")
+        }
+      }
+    }
+    if(encoded) {
+      decodeJSON(encoded).then((res: GraphState)=>{
+        this.props.dispatch(actionImportData({data: res}));
+      }).catch(err=> console.error("not valid encoded stuff"));
     }
   }
 
-  onCopy = (target: string) => (e: any) => {
-    const copyTextarea: HTMLInputElement = document.querySelector(target);
-    if (copyTextarea) {
-      copyTextarea.focus();
-      copyTextarea.select();
-      try {
-        const successful = document.execCommand("copy");
-        const msg = successful ? "successful" : "unsuccessful";
-        console.log("Copying text command was " + msg);
-      } catch (err) {
-        console.log("Oops, unable to copy");
-      }
-    }
-  };
+  openModal() {
+    this.setState({ modalIsOpen: true });
+  }
+
+  handleInput = (name:string) => (e:any) => {
+    this.setState({[name]: e.target.value});
+  }
 
   closeModal() {
     this.setState({ modalIsOpen: false });
   }
 
   render() {
-    const { children, buttonText } = this.props;
+    const { children } = this.props;
     const { json, encoded } = this.state;
     return (
       <div style={{ display: "inline" }}>
@@ -77,7 +73,7 @@ export default class SaveModal extends React.Component<any, any> {
           className="button is-primary ml-half is-outlined is-info"
           onClick={this.openModal}
         >
-          {buttonText}
+        Import
         </a>
         <Modal
           isOpen={this.state.modalIsOpen}
@@ -87,14 +83,15 @@ export default class SaveModal extends React.Component<any, any> {
         >
           <div style={{ width: "500px" }}>
             <div  style={{ display: "flex", justifyContent: "space-between" }}>
-              <h3>JSON ({encoded? json.length : null}characters)</h3>
-              <a onClick={this.onCopy("#just-json")} className="button is-primary">
-                Copy to clipboard
+              <h3>JSON </h3>
+              <a onClick={this.onLoad("json")} className="button is-primary">
+              Load
               </a>
             </div>
             <input
               id="just-json"
               className="input"
+              onChange={this.handleInput("json")}
               style={{overflowY: "scroll", marginTop: '0.5rem' }}
               value={json}
             />
@@ -105,14 +102,15 @@ export default class SaveModal extends React.Component<any, any> {
                 marginTop: "1rem"
               }}
             >
-              <h3>Compressed Json ({encoded? encoded.length : null}characters)</h3>
-              <a onClick={this.onCopy("#compressed-json")} className="button is-primary">
-                Copy to clipboard
+              <h3>Compressed Json </h3>
+              <a onClick={this.onLoad("encoded")} className="button is-primary">
+              Load
               </a>
             </div>
             <input
               id="compressed-json"
               className="input"
+              onChange={this.handleInput("encoded")}
               style={{ overflowY: "scroll", marginTop: '0.5rem'}}
               value={encoded}
             />

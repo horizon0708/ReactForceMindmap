@@ -23,6 +23,7 @@ export default function configureStore(): Store<ApplicationState> {
     reducers,
     persistedState,
     composeWithDevTools(applyMiddleware(tagColorUpdater, tagUpdater))
+    // composeWithDevTools(applyMiddleware( tagUpdater))
   );
 }
 
