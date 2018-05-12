@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "gatsby-link";
-import MindMap from "../mindMap/canvasMindMap";
-// import * as MindMap from "force-mindmap";
+// import MindMap from "../mindMap/canvasMindMap";
+import * as MindMap from "force-mindmap";
 import { nameAndSkills, langRelations, langTags } from '../mindMap/sampleData';
 import * as jsonh from "../../node_modules/json-url/dist/browser/json-url";
 import "json-url/dist/browser/json-url-msgpack";
@@ -10,6 +10,8 @@ import "json-url/dist/browser/json-url-lzma";
 import "json-url/dist/browser/json-url-lzstring";
 import "json-url/dist/browser/json-url-safe64";
 import { getUrlParamByName } from "../utilities/urlParamHelper";
+import { connect } from 'react-redux';
+import { ApplicationState } from '../state/index';
 // Please note that you can use https://github.com/dotansimha/graphql-code-generator
 // to generate all types from graphQL schema
 interface IndexPageProps {
@@ -22,7 +24,7 @@ interface IndexPageProps {
   };
 }
 
-export default class extends React.Component<any, any> {
+class IndexPage extends React.Component<any, any> {
   constructor(props: IndexPageProps, context: any) {
     super(props, context);
     this.state = {
@@ -31,28 +33,42 @@ export default class extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    if (this.props.location.search) {
-      console.log("from url!");
-      const param = getUrlParamByName("data", this.props.location.search);
-      const encoder = jsonh("lzma");
-      encoder.decompress(param).then(json => {
-        console.log(json);
-        this.setState(
-          {
-            mindMap: new MindMap(
-              "#d3forcegraph",
-              json.skills,
-              json.categories,
-              json.origin,
-              json.tags
-            )
-          },
+    // if (this.props.location.search) {
+      // console.log("from url!");
+      // const param = getUrlParamByName("data", this.props.location.search);
+      // const encoder = jsonh("lzma");
+      // encoder.decompress(param).then(json => {
+      //   console.log(json);
+      //   this.setState(
+      //     {
+      //       mindMap: new MindMap(
+      //         "#d3forcegraph",
+      //         json.skills,
+      //         json.categories,
+      //         json.origin,
+      //         json.tags
+      //       )
+      //     },
 
-          () => {
-            this.state.mindMap.startGraph();
-          }
-        );
-      });
+      //     () => {
+      //       this.state.mindMap.startGraph();
+      //     }
+      //   );
+      // });
+      const { mindMap} = this.props.graphUI;
+      if(mindMap){
+      const {origin, categories, tags, skills} = mindMap;
+        this.setState({
+          mindMap: new MindMap(
+            "#d3forcegraph",
+            skills,
+            categories,
+            origin,
+            tags
+          )
+        },() => {
+          this.state.mindMap.startGraph();
+        })
     } else {
       this.setState(
         {
@@ -96,6 +112,13 @@ export default class extends React.Component<any, any> {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => {
+  return { graphUI: state.graphUI };
+};
+
+export default connect(mapStateToProps)(IndexPage);
+
 
 export const pageQuery = graphql`
   query IndexQuery {

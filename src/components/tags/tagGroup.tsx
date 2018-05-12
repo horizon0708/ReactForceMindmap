@@ -3,6 +3,7 @@ import { Relation } from "../customData/index";
 import TagItem from "./tagItem";
 import { UIState } from "../../state/graph/reducer";
 import * as FA from "react-fontawesome";
+import { darker } from '../../state/graphUI/helper';
 
 export interface TagGroupProps {
   tag: Relation;
@@ -14,6 +15,7 @@ export interface TagGroupProps {
   onChildDelete: any;
   currentTag: string;
   UIstate: UIState;
+  color: string;
 }
 
 const TagGroup: React.SFC<TagGroupProps> = ({
@@ -25,7 +27,8 @@ const TagGroup: React.SFC<TagGroupProps> = ({
   onChildAdd,
   onChildDelete,
   onChildAddEnd,
-  UIstate
+  UIstate,
+  color
 }) => {
   const { parent, children } = tag;
 
@@ -38,42 +41,42 @@ const TagGroup: React.SFC<TagGroupProps> = ({
         </form>
       );
     }
-    return <div>{parent}</div>;
+    return <div style={{color: 'white'}}>{parent}</div>;
   };
 
   const onSubmit = (fn: any) => (e: any) => {
     e.preventDefault();
     const item = e.target.tag.value;
     if (item) {
-      console.log(fn(parent, item));
       fn(parent, item);
     }
   };
   return (
-    <div className="tag-container">
-      <div className="tag-parent">
+    <div style={{borderColor: color, borderWidth: '2px', borderStyle: "solid"}} className="tag-container">
+      <div style={{backgroundColor: color}} className="tag-parent">
         {renderEdit()}
-        
-        
+        <div>
         {parent === currentTag && UIstate === UIState.Normal ? null : (
-          <a className="category-icon ml-half" onClick={onParentEditStart(parent)}>
+          <a style={{color: "white"}} className="category-icon ml-half" onClick={onParentEditStart(parent)}>
             <FA name="pencil" />
           </a>
         )}
-        <a className="category-icon ml-half"  onClick={onParentDelete(parent)}><FA name="trash" /></a>
+        <a style={{color: "white"}} className="category-icon ml-half"  onClick={onParentDelete(parent)}><FA name="trash" /></a>
+          </div> 
+        
       </div>
       <div className="tag-children">
-        {children.map(child => {
+        {children.map((child,i) => {
           return (
-            <TagItem parent={parent} name={child} onDelete={onChildDelete} />
+            <TagItem key={child+i} color={color} parent={parent} name={child} onDelete={onChildDelete} />
           );
         })}
       </div>
       <div className="tag-footer">
         {parent === currentTag && UIstate === UIState.TagAdd ? (
-          <button onClick={onChildAddEnd()}>Stop Tagging!</button>
+          <a style={{color: darker(color)}} onClick={onChildAddEnd()}><FA name="stop-circle"/>   Stop Tagging!</a>
         ) : (
-          <a onClick={onChildAdd(parent)}><FA name="plus"/> Tag nodes</a>
+          <a style={{color: darker(color)}} onClick={onChildAdd(parent)}><FA name="plus"/>   Add nodes to {parent}</a>
         )}
       </div>
     </div>

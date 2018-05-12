@@ -20,12 +20,10 @@ export function EncodeJSON(graphState: GraphState): Promise<String> {
       skills,
       origin: getOriginId(categories)
     };
-    console.log(data);
     const codec = jsonh("lzma");
     codec
       .compress(data)
       .then(result => {
-        console.log(result)
         res(result);
       })
       .catch(error => err(error));

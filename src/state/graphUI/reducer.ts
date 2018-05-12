@@ -1,24 +1,48 @@
 import { UIState } from "../graph/reducer";
 import { Reducer, Action } from "redux";
 import { isType } from "typescript-fsa";
+import { actionUpdateTagColorMap, actionGenerateMindMap } from './actions';
+import { generateTagColorMap, generateMindMapData } from './helper';
 import {
   actionUIChange,
   actionCurrentEdit,
   actionUpdateCurrentTag
 } from "../graph/actions";
+import { Relation } from "../../components/customData";
+import { nameAndSkills } from '../../mindMap/sampleData';
 
 export interface GraphUIState {
   helpText: string;
   UIstate: UIState;
   currentEdit: string | null;
   currentTag: string | null;
+  tagColorMap: object;
+  mindMap: {
+    skills: any[],
+    categories: Relation[],
+    tags: Relation[],
+    origin: string
+  } | null
 }
+
+const tagColorRange: string[] = [
+  "#abf4cb",
+  "#ffb5f0",
+  "#f25c5c",
+  "#f4c2ab",
+  "#a9f466",
+  "#b47cea",
+  "#ffb349"
+];
+
 
 const initialState: GraphUIState = {
   helpText: "Start Adding stuff!",
   UIstate: UIState.Normal,
   currentEdit: null,
   currentTag: null,
+  tagColorMap: {Something: "#abf4cb" },
+  mindMap: null
 };
 
 const reducer: Reducer<GraphUIState> = (
@@ -49,6 +73,23 @@ const reducer: Reducer<GraphUIState> = (
       UIstate
     };
   }
+
+  if (isType(action,actionUpdateTagColorMap)){
+    const { tags} = action.payload;
+    return {
+      ...state,
+      tagColorMap: generateTagColorMap(tags,tagColorRange)
+    }
+  }
+
+  if(isType(action, actionGenerateMindMap)){
+    const { data } = action.payload;
+    return {
+      ...state,
+      mindMap: generateMindMapData(data)
+    }
+  }
+
   return state;
 };
 

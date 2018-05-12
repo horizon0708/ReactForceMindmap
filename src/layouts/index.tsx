@@ -6,16 +6,16 @@ import "font-awesome/scss/font-awesome.scss";
 import '../styles/main.scss';
 // import './index.css'
 const Header = () => (
- <nav className="navbar">
-    <div className="navbar-brand">
+  <nav className="container">
+    <div className="brand">
     </div>
-    <div className="navbar-menu">
+    <div className="navbar-menu is-active">
       <div className="navbar-start">
       </div>
       <div className="navbar-end">
-        <a className="navbar-item">Custom Data</a>
-        <a className="navbar-item">Example Graph</a>
-        <a className="navbar-item">About</a>
+        <Link to="/create-your-own"><a className="navbar-item">Create your own</a></Link>
+        <Link to="/"><a className="navbar-item">Example Mindmap</a></Link>
+        <Link to="about"><a className="navbar-item">About</a></Link>
       </div>
     </div>
   </nav>

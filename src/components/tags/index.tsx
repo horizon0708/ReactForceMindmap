@@ -9,6 +9,7 @@ import { TagGroupProps } from './tagGroup';
 import TagGroup from './tagGroup';
 import { actionUpdateTagParent, actionAddTagParent, actionDeleteTagParent, actionAddTagChild, actionDeleteTagChild, actionUpdateCurrentTag, actionUIChange, actionCurrentEdit } from '../../state/graph/actions';
 import * as FA from 'react-fontawesome';
+import { getTagColor } from '../../state/graphUI/helper';
 
 interface Props {
   graph: GraphState
@@ -54,11 +55,11 @@ class TagComponent extends React.Component<AllProps, any> {
 
    renderTags = () => {
       const { tags  } = this.props.graph;
-      const { currentTag, UIstate }= this.props.graphUI;
+      const { currentTag, UIstate, tagColorMap }= this.props.graphUI;
       const { onParentDelete, onParentEdit, onParentEditStart, onChildAdd, onChildAddEnd, onChildDelete} = this;
 
-      return tags.map(tag => {
-      const tagProps: TagGroupProps = {
+      return tags.map((tag,i) => {
+      const tagProps: TagGroupProps & {key: string}= {
         tag,
         onParentDelete,
         onParentEdit,
@@ -67,7 +68,9 @@ class TagComponent extends React.Component<AllProps, any> {
         onChildAddEnd,
         onChildDelete,
         currentTag,
-        UIstate
+        UIstate,
+        color: getTagColor(tagColorMap, tag.parent),
+        key: tag+'_'+i
       }
 
         return <TagGroup {...tagProps} />
@@ -85,7 +88,7 @@ class TagComponent extends React.Component<AllProps, any> {
 }
 
 const mapStateToProps = (state: ApplicationState) => {
-  return { graph: state.graph, graphUI: state.graphUI}
+  return { graph: state.graph.present, graphUI: state.graphUI}
 }
 
 export default connect(mapStateToProps)(TagComponent);

@@ -91,7 +91,6 @@ const reducer: Reducer<GraphState> = (
     return {
       ...state,
       tags: newTags,
-      categoryTags: updateCategoryTags(newTags)
     };
   }
   if (isType(action, actionAddTagParent)) {
@@ -100,7 +99,6 @@ const reducer: Reducer<GraphState> = (
     return {
       ...state,
       tags: newTags,
-      categoryTags: updateCategoryTags(newTags)
     }
   }
   if (isType(action, actionUpdateTagParent)) {
@@ -109,7 +107,6 @@ const reducer: Reducer<GraphState> = (
     return {
       ...state,
       tags: newTags,
-      categoryTags: updateCategoryTags(newTags)
     }
   }
   if (isType(action, actionDeleteTagParent)) {
@@ -118,7 +115,6 @@ const reducer: Reducer<GraphState> = (
     return {
       ...state,
       tags: newTags,
-      categoryTags: updateCategoryTags(newTags)
     }
   }
  if (isType(action, actionDeleteTagChild)) {
@@ -127,7 +123,6 @@ const reducer: Reducer<GraphState> = (
     return {
       ...state,
       tags: newTags,
-      categoryTags: updateCategoryTags(newTags)
     }
   }
   
@@ -147,13 +142,12 @@ const reducer: Reducer<GraphState> = (
     return Object.assign({},clearedState);
   }
 
-   // category tag updates
-  //  if(isType(action, actionUpdateCategoryTags)){
-  //    return {
-  //      ...state,
-  //      categoryTags: updateCategoryTags(state.tags)
-  //    }
-  //  }
+   if(isType(action, actionUpdateCategoryTags)){
+     return {
+       ...state,
+       categoryTags: updateCategoryTags(state.tags)
+     }
+   }
 
   return state;
 };

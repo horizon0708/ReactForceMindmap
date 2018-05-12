@@ -307,24 +307,27 @@ export function updateCategory(
     const parentIndex = afterParentUpdate.findIndex(category =>
       category.children.includes(name)
     );
-    const childIndex = categories[parentIndex].children.findIndex(
-      child => child === name
-    );
-    const childrenHead = afterParentUpdate[parentIndex].children.slice(
-      0,
-      childIndex
-    );
-    const childrenTail = afterParentUpdate[parentIndex].children.slice(
-      childIndex + 1
-    );
-    const newChildren = [...childrenHead, newName, ...childrenTail];
-    const updatedCategory = Object.assign({}, categories[parentIndex], {
-      children: newChildren
-    });
-    const parentHead = afterParentUpdate.slice(0, parentIndex);
-    const parentTail = afterParentUpdate.slice(parentIndex + 1);
-
-    return [...parentHead, updatedCategory, ...parentTail];
+    if(parentIndex > -1){
+      const childIndex = categories[parentIndex].children.findIndex(
+        child => child === name
+      );
+      const childrenHead = afterParentUpdate[parentIndex].children.slice(
+        0,
+        childIndex
+      );
+      const childrenTail = afterParentUpdate[parentIndex].children.slice(
+        childIndex + 1
+      );
+      const newChildren = [...childrenHead, newName, ...childrenTail];
+      const updatedCategory = Object.assign({}, categories[parentIndex], {
+        children: newChildren
+      });
+      const parentHead = afterParentUpdate.slice(0, parentIndex);
+      const parentTail = afterParentUpdate.slice(parentIndex + 1);
+  
+      return [...parentHead, updatedCategory, ...parentTail];
+    }
+    return afterParentUpdate;
   }
   return categories;
 }

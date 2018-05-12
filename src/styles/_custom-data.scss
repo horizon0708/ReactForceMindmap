@@ -1,5 +1,12 @@
+body{
+  font-family: 'monserrat', "source sans pro";
+  font-size: 18px;
+}
+
 .category-parent{
   display: flex;
+  font-weight: 800;
+  font-size: 1.2rem;
 }
 
 .category-children{
@@ -8,11 +15,9 @@
 }
 
 .category-icon {
-  color: $primary;
-  opacity: 0.4;
+  opacity: 0.5;
 
   &:hover{
-    color: $primary;
     opacity: 1;
   }
 }
@@ -44,11 +49,13 @@
 .tag-parent{
   padding: 0.2rem 1rem;
   display: flex;
-  font-size: 1.2rem;
-
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 1.1rem;
 }
 
 .tag-children{
+  margin-top: 1rem; 
   margin-bottom: 0.85rem;
   padding: 0 1rem;
 }
@@ -56,3 +63,5 @@
 .tag-footer{
   padding: 0.2rem 1rem;
 }
+
+// navbar

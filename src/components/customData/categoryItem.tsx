@@ -2,6 +2,7 @@ import * as React from "react";
 import { Relation } from "../../mindMap/mindMapHelper";
 import { UIState } from "../../state/graph/reducer";
 import * as FA from "react-fontawesome";
+import { getTagColor } from '../../state/graphUI/helper';
 
 export interface CategoryProps {
   parent: string;
@@ -16,6 +17,7 @@ export interface CategoryProps {
   isOpen: boolean;
   origin: boolean | undefined;
   tags: string[];
+  tagColorMap: any;
 }
 
 const CategoryItem: React.SFC<CategoryProps> = ({
@@ -31,7 +33,8 @@ const CategoryItem: React.SFC<CategoryProps> = ({
   isOpen,
   origin,
   UIstate,
-  tags
+  tags,
+  tagColorMap,
 }) => {
   //https://stackoverflow.com/a/40795623
   //https://stackoverflow.com/a/44393231
@@ -57,8 +60,8 @@ const CategoryItem: React.SFC<CategoryProps> = ({
 
   const renderTags = () => {
     return tags
-      ? tags.map(tag => {
-          return <span className="tag">{tag}</span>;
+      ? tags.map((tag,i) => {
+          return <span key={tag + i} style={{backgroundColor: getTagColor(tagColorMap, tag), fontWeight: 400}} className="tag ml-half">{tag}</span>;
         })
       : null;
   };
@@ -75,7 +78,7 @@ const CategoryItem: React.SFC<CategoryProps> = ({
         {origin ? null : <a className="ml-half category-icon" onClick={onDelete(parent)}><FA name="trash" /></a>}
         {renderTags()}
         {!tags.includes(currentTag) && UIstate === UIState.TagAdd ? (
-          <button onClick={onAddToTag(parent)}>
+          <button className="ml-half" onClick={onAddToTag(parent)}>
             <FA name="plus" /> Add to {currentTag}
           </button>
         ) : null}

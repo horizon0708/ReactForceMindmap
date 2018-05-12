@@ -17,6 +17,7 @@ import { ListProps } from "./categoryList";
 import { getCategory, getCategoryTags, getOriginId } from '../../state/graph/helper';
 import { CategoryProps } from "./categoryItem";
 import CategoryItem from './categoryItem';
+import { getTagColor } from '../../state/graphUI/helper';
 
 export interface Relation {
   parent: string;
@@ -48,13 +49,14 @@ class CustomData extends React.Component<AllProps, any> {
     const {
       currentTag,
       currentEdit,
-      UIstate
+      UIstate,
+      tagColorMap
     } = this.props.graphUI;
     const category = getCategory(categories, categoryName);
     const { onAdd, onEdit, onDelete, onEditStart, onAddToTag } = this;
     if (category) {
       const { parent, isOpen, origin} = category
-      const categoryProps: CategoryProps = {
+      const categoryProps: CategoryProps & {key: string} = {
         parent,
           onAdd,
           onEditStart,
@@ -67,6 +69,8 @@ class CustomData extends React.Component<AllProps, any> {
           onAddToTag,
           UIstate,
           tags: getCategoryTags(categoryTags, category.parent),
+          tagColorMap,
+          key: parent
       }
 
       return (
@@ -77,7 +81,7 @@ class CustomData extends React.Component<AllProps, any> {
         </CategoryItem>
       );
     }
-      const defaultProps: CategoryProps = {
+      const defaultProps: CategoryProps  & {key: string} = {
           onAdd,
           onEditStart,
           parent: categoryName,
@@ -89,7 +93,9 @@ class CustomData extends React.Component<AllProps, any> {
           currentTag,
           onAddToTag,
           UIstate,
-          tags: getCategoryTags(categoryTags, categoryName)
+          tags: getCategoryTags(categoryTags, categoryName),
+          tagColorMap,
+          key: categoryName
       }
     return (
       <CategoryItem {...defaultProps}/>
@@ -133,7 +139,7 @@ class CustomData extends React.Component<AllProps, any> {
 }
 
 const mapStateToProps = (state: ApplicationState) => {
-  return { graph: state.graph, graphUI: state.graphUI };
+  return { graph: state.graph.present, graphUI: state.graphUI };
 };
 
 export default connect(mapStateToProps)(CustomData);
