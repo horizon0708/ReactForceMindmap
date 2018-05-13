@@ -34,7 +34,7 @@ export function darker(color: string) {
 }
 
 export function generateMindMapData(graphState: GraphState){
-  const { categories, tags, skills } = graphState;
+  const { categories, tags, skills, title } = graphState;
     const filteredCategories = categories.filter(
       category => category.children.length > 0
     );
@@ -43,6 +43,7 @@ export function generateMindMapData(graphState: GraphState){
       categories: filteredCategories,
       tags: filteredTags,
       skills,
+      title,
       origin: getOriginId(categories)
     };
 }

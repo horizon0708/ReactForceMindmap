@@ -3,7 +3,7 @@ import { ActionCreator, Action } from "redux";
 import { $Call } from "utility-types"; // From https://github.com/piotrwitek/utility-types
 
 import actionCreatorFactory from "typescript-fsa";
-import { UIState, GraphState } from "./reducer";
+import { UIState, GraphState } from './reducer';
 
 const actionCreator = actionCreatorFactory();
 
@@ -26,6 +26,8 @@ export interface GraphAction {
   actionClearAll: typeof actionClearAll;
   actionImportData: typeof actionImportData;
 }
+
+export const actionUpdateTitle = actionCreator<{name: string}>("CHANGE_TITLE");
 
 export const actionImportData = actionCreator<{ data: GraphState }>(
   "IMPORT_DATA"

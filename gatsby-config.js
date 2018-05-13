@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Typescript Starter`,
+    title: `Force Mindmap`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -16,6 +16,13 @@ module.exports = {
           `source sans pro\:300,400,400i,700` // you can also specify font weights and styles
         ]
       }
-    }
-  ],
+    },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-109296138-2",
+      },
+    },
+  ]
+  
 }

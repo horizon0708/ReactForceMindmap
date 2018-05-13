@@ -31,7 +31,7 @@ import {
 } from "./actions";
 import { isType } from "typescript-fsa";
 import { createTagParent, deleteTagParent, deleteTagChild, updateCategoryTags } from './helper';
-import { actionUpdateCurrentTag, actionCurrentEdit, actionUIChange, actionUpdateCategoryTags, actionClearAll, actionImportData } from './actions';
+import { actionUpdateCurrentTag, actionCurrentEdit, actionUIChange, actionUpdateCategoryTags, actionClearAll, actionImportData, actionUpdateTitle } from './actions';
 import { importState } from './dataLoader';
 
 const reducer: Reducer<GraphState> = (
@@ -154,6 +154,13 @@ const reducer: Reducer<GraphState> = (
      }
    }
 
+   if(isType(action,actionUpdateTitle)){
+    return{
+      ...state,
+      title: action.payload.name
+    }
+   }
+
   return state;
 };
 
@@ -162,6 +169,7 @@ export interface GraphState {
   tags: Relation[];
   categoryTags: Relation[]
   skills: any[];
+  title: string;
 }
 
 export enum UIState {
@@ -170,6 +178,7 @@ export enum UIState {
 }
 
 const graphState: GraphState = {
+  title: 'New Mindmap',
   categories: [
     {
       parent: "Origin",
@@ -217,7 +226,8 @@ const clearedState: GraphState = {
   ],
   tags: [],
   categoryTags: [],
-  skills: [["Origin", 5]]
+  skills: [["Origin", 5]],
+  title: "A new title"
 }
 
 export default reducer;

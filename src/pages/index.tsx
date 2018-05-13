@@ -27,7 +27,7 @@ class IndexPage extends React.Component<any, any> {
     super(props, context);
     this.state = {
       mindMap: null,
-      example: true
+      example: false
     };
   }
 
@@ -62,7 +62,8 @@ class IndexPage extends React.Component<any, any> {
             categories,
             origin,
             tags
-          )
+          ),
+          example: false
         },
         () => {
           this.state.mindMap.startGraph();
@@ -77,7 +78,8 @@ class IndexPage extends React.Component<any, any> {
             langRelations,
             "Web Dev",
             langTags
-          )
+          ),
+          example: true
         },
         () => {
           this.state.mindMap.startGraph();
@@ -87,9 +89,11 @@ class IndexPage extends React.Component<any, any> {
   }
 
   public render() {
+    const {mindMap} = this.props.graphUI
     return (
-      <div>
+      <div style={{marginTop: '1rem'}}>
         <div style={{display: "flex", justifyContent:"space-between"}}className="container">
+        <h3 className="title is-2">{mindMap ? mindMap.title  : "My web dev skills"}</h3> 
           <a
             className="button is-primary"
             onClick={
@@ -98,9 +102,6 @@ class IndexPage extends React.Component<any, any> {
           >
             Go up one level
           </a>
-          <div>
-
-          </div>
         </div>
         <canvas id="d3forcegraph" width="1000" height="600" />
         <ColorLegend show={this.state.example} colorRange={colorRange} ></ColorLegend>
