@@ -52,7 +52,7 @@ class Workbar extends React.Component<any, any> {
   };
 
   onMindMapGenerate = () => {
-    this.props.dispatch(actionGenerateMindMap({ data: this.props.graph }));
+    this.props.dispatch(actionGenerateMindMap({ data: this.props.graph.present }));
     navigateTo("/");
   };
 
