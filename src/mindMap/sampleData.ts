@@ -54,10 +54,10 @@ export const langRelations: Relation[] = [
  // in the react editor each node must have respective parent AND child even if it will have no children
  // parents with no children will be filtered out before sent
  // for testing purposes i am adding one example 'BackEnd' node 
-  {
-    parent: "BackEnd",
-    children: []
-  }
+  // {
+  //   parent: "BackEnd",
+  //   children: []
+  // }
 ];
 
 export const langTags: Relation[] = [

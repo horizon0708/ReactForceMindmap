@@ -12,7 +12,7 @@ export interface ApplicationState {
   graphUI: GraphUIState;
 }
 
-interface Undoable<T>{
+export interface Undoable<T>{
   present: T;
   past: T[],
   fruture: T[]

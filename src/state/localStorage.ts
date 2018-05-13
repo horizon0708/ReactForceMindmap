@@ -1,6 +1,7 @@
 import { GraphState } from "./graph/reducer";
+import { Undoable } from './index';
 
-export const saveState = (state: GraphState) => {
+export const saveState = (state: Undoable<GraphState>) => {
   try{
     const serialized = JSON.stringify(state);
     localStorage.setItem('state', serialized);

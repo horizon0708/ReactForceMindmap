@@ -12,8 +12,8 @@ const Header = () => (
     </div>
     <div style={{display: 'flex'}}>
         <Link className="navbar-item" to="/create-your-own">Create your own</Link>
-        <Link className="navbar-item" to="/">Example Graph</Link>
-        <Link className="navbar-item" to="about">About</Link>
+        <Link className="navbar-item" to="/?example=1">Example Graph</Link>
+        <Link className="navbar-item" to="/about">About</Link>
     </div>
   </nav>
 )

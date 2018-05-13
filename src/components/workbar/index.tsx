@@ -1,7 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { ApplicationState } from "../../state/index";
-import { EncodeJSON } from "../../state/graph/dataEncoder";
 import { navigateTo } from "gatsby-link";
 import { ActionCreators } from "redux-undo";
 import {
@@ -16,16 +15,6 @@ import ReactModal from "../modal";
 import LoadModal from '../loadModal';
 
 class Workbar extends React.Component<any, any> {
-  encodeAndSend = () => {
-    EncodeJSON(this.props.graph)
-      .then(res => {
-        navigateTo(`/?data=${res}`);
-      })
-      .catch(err => {
-        console.log("encoding error: could not get encoded JSON!");
-      });
-  };
-
   undo = () => {
     this.props.dispatch(ActionCreators.undo());
   };
@@ -95,7 +84,7 @@ class Workbar extends React.Component<any, any> {
           {this.renderStopAddTag()}
         </div>
         <div>
-          <ReactModal buttonText="Export" graph={this.props.graph}/>
+          <ReactModal buttonText="Export/Save" graph={this.props.graph}/>
           <LoadModal dispatch={this.props.dispatch}></LoadModal>
           <a
             onClick={this.onMindMapGenerate}
@@ -110,7 +99,7 @@ class Workbar extends React.Component<any, any> {
 }
 
 const mapStateToProps = (state: ApplicationState) => {
-  return { graph: state.graph.present, graphUI: state.graphUI };
+  return { graph: state.graph, graphUI: state.graphUI };
 };
 
 export default connect(mapStateToProps)(Workbar);

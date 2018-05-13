@@ -1,16 +1,11 @@
 import * as React from "react";
 import Link from "gatsby-link";
 // import MindMap from "../mindMap/canvasMindMap";
-
+import ColorLegend from '../components/colorLegend'
 import * as MindMap from "force-mindmap";
 import { nameAndSkills, langRelations, langTags } from "../mindMap/sampleData";
 //@ts-ignore
-import * as jsonh from "../../node_modules/json-url/dist/browser/json-url";
-import "json-url/dist/browser/json-url-msgpack";
-import "json-url/dist/browser/json-url-lzw";
-import "json-url/dist/browser/json-url-lzma";
-import "json-url/dist/browser/json-url-lzstring";
-import "json-url/dist/browser/json-url-safe64";
+
 import { getUrlParamByName } from "../utilities/urlParamHelper";
 import { connect } from "react-redux";
 import { ApplicationState } from "../state/index";
@@ -32,6 +27,7 @@ class IndexPage extends React.Component<any, any> {
     super(props, context);
     this.state = {
       mindMap: null,
+      example: true
     };
   }
 
@@ -49,6 +45,7 @@ class IndexPage extends React.Component<any, any> {
               "Web Dev",
               langTags
             )
+            ,example: true
           },
           () => {
             this.state.mindMap.startGraph();
@@ -106,10 +103,18 @@ class IndexPage extends React.Component<any, any> {
           </div>
         </div>
         <canvas id="d3forcegraph" width="1000" height="600" />
+        <ColorLegend show={this.state.example} colorRange={colorRange} ></ColorLegend>
       </div>
     );
   }
 }
+const colorRange: string[] = [
+  "#72dbe5",
+  "#62abd6",
+  "#5fa7dd",
+  "#4678c4",
+  "#284a96"
+];
 
 const mapStateToProps = (state: ApplicationState) => {
   return { graphUI: state.graphUI };

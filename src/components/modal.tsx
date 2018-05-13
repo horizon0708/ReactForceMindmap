@@ -2,6 +2,8 @@ import * as React from "react";
 import * as Modal from "react-modal";
 import { GraphState } from "../state/graph/reducer";
 import { EncodeJSON } from "../state/graph/dataEncoder";
+import { saveState } from '../state/localStorage';
+import { Undoable } from "../state";
 
 const customStyles = {
   content: {
@@ -16,14 +18,15 @@ const customStyles = {
 
 export interface ModalProps {
   buttonText: string;
-  graph: GraphState;
+  graph: Undoable<GraphState>;
 }
 
-export default class SaveModal extends React.Component<any, any> {
+export default class SaveModal extends React.Component<ModalProps, any> {
   constructor() {
     super();
 
     this.state = {
+      client: false,
       modalIsOpen: false,
       json: null,
       encoded: null
@@ -33,9 +36,13 @@ export default class SaveModal extends React.Component<any, any> {
     this.closeModal = this.closeModal.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({client: true});
+  }
+
   openModal() {
     this.setState({ modalIsOpen: true });
-    const { graph } = this.props;
+    const graph= this.props.graph.present;
     console.log(graph);
     if (graph) {
       this.setState({ json: JSON.stringify(graph) });
@@ -68,11 +75,16 @@ export default class SaveModal extends React.Component<any, any> {
     this.setState({ modalIsOpen: false });
   }
 
+  saveToLocalStorage = () => {
+    const graph= this.props.graph.present;
+    saveState({graph});
+  }
+
   render() {
     const { children, buttonText } = this.props;
-    const { json, encoded } = this.state;
+    const { client,json, encoded } = this.state;
     return (
-      <div style={{ display: "inline" }}>
+      client? <div style={{ display: "inline" }}>
         <a
           className="button is-primary ml-half is-outlined is-info"
           onClick={this.openModal}
@@ -80,6 +92,7 @@ export default class SaveModal extends React.Component<any, any> {
           {buttonText}
         </a>
         <Modal
+          ariaHideApp={false}
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
           style={customStyles}
@@ -93,6 +106,7 @@ export default class SaveModal extends React.Component<any, any> {
               </a>
             </div>
             <input
+            readOnly
               id="just-json"
               className="input"
               style={{overflowY: "scroll", marginTop: '0.5rem' }}
@@ -111,14 +125,17 @@ export default class SaveModal extends React.Component<any, any> {
               </a>
             </div>
             <input
+            readOnly
               id="compressed-json"
               className="input"
               style={{ overflowY: "scroll", marginTop: '0.5rem'}}
               value={encoded}
             />
           </div>
+          {/* <a style={{marginTop: '1rem', textAlign: 'right'}} onClick={this.saveToLocalStorage}className="button is-primary">Save to local storage</a> */}
         </Modal>
-      </div>
-    );
+      </div>: null
+
+    )
   }
 }

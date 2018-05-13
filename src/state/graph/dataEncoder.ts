@@ -1,13 +1,14 @@
 //@ts-ignore
+import * as jsonurl from 'json-url/dist/browser/json-url';
 import "json-url/dist/browser/json-url-msgpack";
 import "json-url/dist/browser/json-url-lzw";
 import "json-url/dist/browser/json-url-lzma";
 import "json-url/dist/browser/json-url-lzstring";
 import "json-url/dist/browser/json-url-safe64";
-if(typeof window !== 'undefined'){
-  const jsonurl = require("../../../node_modules/json-url/dist/browser/json-url");
+// if(typeof window !== 'undefined'){
+//   const jsonurl = require("../../../node_modules/json-url/dist/browser/json-url");
 
-}
+// }
 
 import { GraphState } from "./reducer";
 import { getOriginId } from './helper';
