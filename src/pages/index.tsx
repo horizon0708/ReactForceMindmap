@@ -2,7 +2,7 @@ import * as React from "react";
 import Link from "gatsby-link";
 // import MindMap from "../mindMap/canvasMindMap";
 import ColorLegend from '../components/colorLegend'
-import * as MindMap from "force-mindmap";
+import MindMap from "force-mindmap";
 import { nameAndSkills, langRelations, langTags } from "../mindMap/sampleData";
 //@ts-ignore
 
