@@ -4,15 +4,24 @@ import Categories from "../components/customData";
 import { connect } from "react-redux";
 import { navigateTo } from "gatsby-link";
 import { EncodeJSON } from "../state/graph/dataEncoder";
-import Workbar from '../components/workbar'
+// import Workbar from '../components/workbar'
 
 
 
 class DataInput extends React.Component<any, any> {
+  state ={
+    client: false
+  }
+  
+  componentDidMount() {
+    this.setState({client: true})
+  }
+  
   render() {
     return (
+      this.state.client?
       <div style={{marginTop: '1rem'}}>
-        <Workbar></Workbar>
+        {/* <Workbar></Workbar> */}
         <div style={{paddingTop: '1rem'}} className="columns">
           <div className="column is-two-thirds">
               <Categories />
@@ -21,7 +30,8 @@ class DataInput extends React.Component<any, any> {
             <Tags />
           </div>
         </div>
-      </div>
+      </div>:
+      null
     );
   }
 }

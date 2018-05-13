@@ -1,10 +1,14 @@
 //@ts-ignore
-import * as jsonurl from "../../../node_modules/json-url/dist/browser/json-url";
 import "json-url/dist/browser/json-url-msgpack";
 import "json-url/dist/browser/json-url-lzw";
 import "json-url/dist/browser/json-url-lzma";
 import "json-url/dist/browser/json-url-lzstring";
 import "json-url/dist/browser/json-url-safe64";
+if(typeof window !== 'undefined'){
+  const jsonurl = require("../../../node_modules/json-url/dist/browser/json-url");
+
+}
+
 import { GraphState } from "./reducer";
 import { getOriginId } from './helper';
 
@@ -21,6 +25,7 @@ export function EncodeJSON(graphState: GraphState): Promise<String> {
     //   skills,
     //   origin: getOriginId(categories)
     // };
+    if(window !== undefined) {
     const codec = jsonurl("lzma");
     codec
       .compress(graphState)
@@ -28,11 +33,16 @@ export function EncodeJSON(graphState: GraphState): Promise<String> {
         res(result);
       })
       .catch((error: any) => err(error));
+    } else{
+      err();
+    }
+
   });
 }
 
 export function decodeJSON(data: string) {
   return new Promise((res, err )=>{
+    if(window !== undefined) {
     const codec = jsonurl("lzma");
     codec
       .decompress(data)
@@ -40,5 +50,9 @@ export function decodeJSON(data: string) {
         res(result);
       })
       .catch((error: any) => err(error));
+    }
+    else {
+      err()
+    }
   });
 }
