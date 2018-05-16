@@ -29,13 +29,14 @@ class DataInput extends React.Component<any, any> {
             className="input"
             type="text"
             name="title"
-            placeholder={}
+            placeholder={title}
           />
           <button
             style={{ border: "none", background: "none", fontSize: "1.5rem" }}
             className="category-icon"
-          />
-          <FA name="pencil" />{" "}
+          >
+          <FA name="pencil" />
+          </button>
         </form>
       );
     }

@@ -17,12 +17,7 @@ export interface GraphUIState {
   currentEdit: string | null;
   currentTag: string | null;
   tagColorMap: object;
-  mindMap: {
-    skills: any[],
-    categories: Relation[],
-    tags: Relation[],
-    origin: string
-  } | null
+  generated: boolean 
 }
 
 const tagColorRange: string[] = [
@@ -42,7 +37,7 @@ const initialState: GraphUIState = {
   currentEdit: null,
   currentTag: null,
   tagColorMap: {Something: "#abf4cb" },
-  mindMap: null
+  generated: false
 };
 
 const reducer: Reducer<GraphUIState> = (
@@ -86,7 +81,7 @@ const reducer: Reducer<GraphUIState> = (
     const { data } = action.payload;
     return {
       ...state,
-      mindMap: generateMindMapData(data)
+      generated: true
     }
   }
 

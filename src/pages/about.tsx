@@ -36,6 +36,8 @@ export default class extends React.Component<any, any>{
 
 <p>At the moment, you can share your mindmaps by exporting them and importing them. I really wanted to enable sharing the mindmap by url, but I would need an backend server to do that; and I have ran out of time I have given myself. </p>
 
+<p>EDIT: I quickly made an elixir server with $5 DO droplet with ratelimiting - lets see how this goes.</p>
+
 <p>I have learnt a lot about d3, redux (esp with typescript) and Gatsby with this project and hopefully I will have time to write some interesting blog posts about it later!</p>
     </div>
     </div>

@@ -13,7 +13,7 @@ import { tagColorUpdater } from "./state/middleware/tagColorUpdater";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { tagUpdater } from "./state/middleware/tagUpdater";
 import { loadState } from "./state/localStorage";
-
+import ReduxThunk from 'redux-thunk'
 export default function configureStore(): Store<ApplicationState> {
   // create the composing function for our middlewares
   const persistedState = loadState();
@@ -22,7 +22,7 @@ export default function configureStore(): Store<ApplicationState> {
   return createStore<any, any, any, any>(
     reducers,
     persistedState,
-    composeWithDevTools(applyMiddleware(tagColorUpdater, tagUpdater))
+    composeWithDevTools(applyMiddleware(tagColorUpdater, tagUpdater, ReduxThunk))
     // composeWithDevTools(applyMiddleware( tagUpdater))
   );
 }

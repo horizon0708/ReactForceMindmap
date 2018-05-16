@@ -5,6 +5,7 @@ import { $Call } from "utility-types"; // From https://github.com/piotrwitek/uti
 import actionCreatorFactory from "typescript-fsa";
 import { UIState, GraphState } from './reducer';
 
+
 const actionCreator = actionCreatorFactory();
 
 export interface GraphAction {
@@ -92,3 +93,4 @@ export const actionUpdateCategoryTags = actionCreator<{}>(
   "CATEGORY_TAG_UPDATE"
 );
 export const actionClearAll = actionCreator<{}>("CLEAR_ALL");
+

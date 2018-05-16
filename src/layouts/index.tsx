@@ -30,10 +30,10 @@ class DefaultLayout extends React.PureComponent<DefaultLayoutProps, void> {
     return (
       <div>
         <Helmet
-          title="Gatsby Default Starter"
+          title="Force Mindmap"
           meta={[
-            { name: 'description', content: 'Sample' },
-            { name: 'keywords', content: 'sample, something' },
+            { name: 'description', content: 'Force Mindmap' },
+            { name: 'keywords', content: 'Typescript, D3, React, Redux, Mindmap' },
           ]}
         />
         <Header />

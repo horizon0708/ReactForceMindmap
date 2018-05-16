@@ -13,4 +13,7 @@ interface GraphUIAction {
 }
 
 export const actionUpdateTagColorMap = actionCreator<{tags: Relation[]}>("UPDATE_TAG_MAP");
-export const actionGenerateMindMap = actionCreator<{data: GraphState}>("GENERATE_MIND_MAP")
+export const actionGenerateMindMap = actionCreator<{data: GraphState}>("GENERATE_MIND_MAP");
+export const loadMindMap = actionCreator<{data: GraphState}>("LOAD_MINDMAP");
+export const saveMindMap = actionCreator<{data: GraphState}>("SAVE_MINDMAP");
+

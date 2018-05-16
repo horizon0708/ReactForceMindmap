@@ -2,8 +2,8 @@ import * as React from "react";
 import * as Modal from "react-modal";
 import { GraphState } from "../state/graph/reducer";
 import { EncodeJSON } from "../state/graph/dataEncoder";
-import { saveState } from '../state/localStorage';
 import { Undoable } from "../state";
+import axios from 'axios';
 
 const customStyles = {
   content: {
@@ -29,6 +29,7 @@ export default class SaveModal extends React.Component<ModalProps, any> {
       client: false,
       modalIsOpen: false,
       json: null,
+      url: null,
       encoded: null
     };
 
@@ -43,9 +44,9 @@ export default class SaveModal extends React.Component<ModalProps, any> {
   openModal() {
     this.setState({ modalIsOpen: true });
     const graph= this.props.graph.present;
-    console.log(graph);
     if (graph) {
       this.setState({ json: JSON.stringify(graph) });
+      this.onGetUrl();
       EncodeJSON(graph)
         .then(res => this.setState({ encoded: res }))
         .catch(err =>
@@ -54,6 +55,29 @@ export default class SaveModal extends React.Component<ModalProps, any> {
           })
         );
     }
+  }
+
+  onGetUrl = () => {
+    const apiUrl = "http://159.89.132.99:4000/";
+    const siteUrl = "https://mindmap.jameskim.co.nz";
+    const data = JSON.stringify(this.props.graph.present);
+    axios.post(apiUrl, {data})
+    .then(res => {
+      console.log(res);
+      if(res.status === 200){
+        this.setState({url: siteUrl+ `?id=${res.data.url}`})
+      } else if(res.status === 400){
+        this.setState({url: 'Something went wrong!'});
+      } else if (res.status === 403) {
+        this.setState({url: "You have been rate-limited. Max Request is 10 per min"});
+      }
+      else {
+        this.setState({url: "The server is probably dead. RIP server."});
+      }
+    })
+    .catch(err => {
+        this.setState({url: "The server is probably dead. RIP server."});
+    })
   }
 
   onCopy = (target: string) => (e: any) => {
@@ -75,14 +99,10 @@ export default class SaveModal extends React.Component<ModalProps, any> {
     this.setState({ modalIsOpen: false });
   }
 
-  saveToLocalStorage = () => {
-    const graph= this.props.graph.present;
-    saveState({graph});
-  }
 
   render() {
     const { children, buttonText } = this.props;
-    const { client,json, encoded } = this.state;
+    const { client,json, encoded, url } = this.state;
     return (
       client? <div style={{ display: "inline" }}>
         <a
@@ -99,7 +119,21 @@ export default class SaveModal extends React.Component<ModalProps, any> {
           contentLabel="Example Modal"
         >
           <div style={{ width: "500px" }}>
-            <div  style={{ display: "flex", justifyContent: "space-between" }}>
+          <div  style={{ display: "flex", justifyContent: "space-between" }}>
+              <h3>URL (may not work if the backend server is down)</h3>
+              <a onClick={this.onCopy("#url-to-share")} className="button is-primary">
+                Copy to clipboard
+              </a>
+            </div>
+            <input
+            readOnly
+              id="url-to-share"
+              className="input"
+              style={{overflowY: "scroll", marginTop: '0.5rem' }}
+              value={url}
+            />
+            
+            <div  style={{ marginTop: '1rem', display: "flex", justifyContent: "space-between" }}>
               <h3>JSON ({encoded? json.length : null}characters)</h3>
               <a onClick={this.onCopy("#just-json")} className="button is-primary">
                 Copy to clipboard
