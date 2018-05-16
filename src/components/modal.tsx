@@ -59,7 +59,7 @@ export default class SaveModal extends React.Component<ModalProps, any> {
 
   onGetUrl = () => {
     const apiUrl = "http://159.89.132.99:4000/";
-    const siteUrl = "https://mindmap.jameskim.co.nz";
+    const siteUrl = "http://mindmap.jameskim.co.nz";
     const data = JSON.stringify(this.props.graph.present);
     axios.post(apiUrl, {data})
     .then(res => {

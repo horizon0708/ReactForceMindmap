@@ -14,6 +14,8 @@ import { generateMindMapData } from "../state/graphUI/helper";
 import { actionImportData } from "../state/graph/actions";
 import { GraphState } from "../state/graph/reducer";
 import SaveModal from '../components/modal';
+import Flash from "../components/flash";
+
 interface IndexPageProps {
   data: {
     site: {
@@ -85,11 +87,14 @@ class IndexPage extends React.Component<any, any> {
             const data = JSON.parse(res.data.data);
             this.props.dispatch(actionImportData({ data }));
             this.startLoaded(data);
-          } else if(res.status === 400) {
+          } 
+        })
+        .catch(err=>{
+          if(err.response.status === 400){
             this.startExample();
-            this.setState({error: "the mindmap was not found, check your url!"});
+            this.setState({error: "The shared mindmap could not be found, check your url!"});
           } else {
-            this.setState({error: "The server is boom. Try again later."})
+            this.setState({error: "Sorry, the server is probably dead. RIP. Try again later."})
           }
         });
       }
@@ -109,10 +114,17 @@ class IndexPage extends React.Component<any, any> {
     return null;
   }
 
+  onErrorDismiss = () => {
+    this.setState({error: null});
+  }
+
   public render() {
-    const { data } = this.state;
+    const { data,error } = this.state;
     return (
       <div style={{ marginTop: "1rem" }}>
+        <Flash open={error !== null} onClick={this.onErrorDismiss}>
+          {error}
+        </Flash>
         <div
           style={{ display: "flex", justifyContent: "space-between" }}
           className="container"
@@ -135,7 +147,19 @@ class IndexPage extends React.Component<any, any> {
           {this.renderShareButton()}
         </div>
         <canvas id="d3forcegraph" width="1000" height="600" />
+        <div className="columns">
+          <div className="column">
         <ColorLegend show={this.state.example} colorRange={colorRange} />
+          </div>
+          <div className="column">
+            <h3 className="title is-3">Info</h3>
+            <ul style={{marginLeft: '1rem',listStyle: 'disc'}}>
+              <li>Nodes with <span>Green outlines</span> are parent nodes. Click on them to go deeper!</li>
+              <li>Try dragging nodes around!</li>
+              <li>If the shared url didn't work, try http instead of https, url loading does not work on https because I am too lazy to get a SSL for my backend API.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     );
   }
